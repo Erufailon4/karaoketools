@@ -104,6 +104,10 @@ class USFParser:
                 case 'E':
                     break
     
+    def modifyheader(self, header: str, value: str) -> None:
+        if header in self.header:
+            self.header[header] = value
+
     def encode(self) -> list[str]:
         outputlines = []
         for header in self.header.keys():
