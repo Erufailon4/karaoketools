@@ -3,7 +3,7 @@
 Remove trailing hyphens from karaoke files
 """
 
-import common
+from common import linesfromfile, writetofile
 import argparse
 
 def removehyphens(filename):
