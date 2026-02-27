@@ -7,7 +7,7 @@ from common import USFParser
 from pathlib import PurePath
 import argparse
 
-def fixfilenames(filename):
+def fixfilenames(filename, songsdir):
     parser = USFParser()
     parser.parsefile(filename)
     song = parser.header["title"]
@@ -17,13 +17,18 @@ def fixfilenames(filename):
         if header in parser.header:
             filenameparts = parser.header[header].rsplit(sep='.', maxsplit=1)
             parser.modifyheader(header, newname+"."+filenameparts[1])
-    parser.encodetofile(PurePath(filename).parent.joinpath(newname+".txt"))
+    parser.encodetofile(songsdir.joinpath(newname, newname+".txt"))
 
 def main():
     ap = argparse.ArgumentParser(description="change the file names in (and of) the txt file to match the song title and artist")
     ap.add_argument("file", help="txt file to change")
+    ap.add_argument("-s", "--songsdir", help="songs directory (default: immediate parent of file)")
     args = ap.parse_args()
-    fixfilenames(args.file)
+    if args.songsdir:
+        songsdir = PurePath(args.songsdir)
+    else:
+        songsdir = PurePath(args.file).parent
+    fixfilenames(args.file, songsdir)
 
 if __name__ == "__main__":
     main()
