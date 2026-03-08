@@ -55,6 +55,15 @@ class USFEvent:
         return outputline
 
 class USFParser:
+    TAGS = {
+        "#BPM": "bpm",
+        "#MP3": "mp3",
+        "#TITLE": "title",
+        "#ARTIST": "artist",
+        "#COVER": "cover",
+        "#BACKGROUND": "background",
+        "#VIDEO": "video"
+    }
     def __init__(self):
         self.header = {}
         self.events = []
@@ -82,21 +91,8 @@ class USFParser:
     def parsefile(self, filename: str) -> None:
         preparsed = self.preparsefile(filename)
         for headerline in preparsed["header"]:
-            match headerline["key"]:
-                case "#BPM":
-                    self.header.update({"bpm": headerline["value"].strip()})
-                case "#MP3":
-                    self.header.update({"mp3": headerline["value"].strip()})
-                case "#TITLE":
-                    self.header.update({"title": headerline["value"].strip()})
-                case "#ARTIST":
-                    self.header.update({"artist": headerline["value"].strip()})
-                case "#COVER":
-                    self.header.update({"cover": headerline["value"].strip()})
-                case "#BACKGROUND":
-                    self.header.update({"background": headerline["value"].strip()})
-                case "#VIDEO":
-                    self.header.update({"video": headerline["value"].strip()})
+            if headerline["key"] in USFParser.TAGS:
+                self.header.update({USFParser.TAGS[headerline["key"]]: headerline["value"].strip()})
         for bodyline in preparsed["body"]:
             match bodyline[0]:
                 case ':' | '*' | 'R' | 'G' | 'F' | '-':
@@ -112,14 +108,9 @@ class USFParser:
         outputlines = []
         for header in self.header.keys():
             tag = ""
-            match header:
-                case "bpm": tag = "#BPM"
-                case "mp3": tag = "#MP3"
-                case "title": tag = "#TITLE"
-                case "artist": tag = "#ARTIST"
-                case "cover": tag = "#COVER"
-                case "background": tag = "#BACKGROUND"
-                case "video": tag = "#VIDEO"
+            for x in USFParser.TAGS.items():
+                if header == x[1]:
+                    tag = x[0]
             if tag != "":
                 outputlines.append(f"{tag}:{self.header[header]}")
         for event in self.events:
