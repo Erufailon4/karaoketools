@@ -4,6 +4,7 @@ Common functions and classes for all tools
 """
 
 from enum import Enum
+from pathlib import Path
 
 def stringfromfile(filename: str) -> str:
     with open(filename) as inputfile:
@@ -17,6 +18,11 @@ def linesfromfile(filename: str) -> list[str]:
 def writetofile(filename: str, data: str) -> None:
     with open(filename, "w") as outputfile:
         print(data, file=outputfile)
+
+def getsongsdir() -> str:
+    userhome = Path.home()
+    configdir = userhome.joinpath(".config", "karaoketools")
+    return stringfromfile(configdir.joinpath("songsdir.txt")).strip()
 
 class USFEventType(Enum):
     NONE = "NONE"

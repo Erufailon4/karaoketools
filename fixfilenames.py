@@ -22,12 +22,15 @@ def fixfilenames(filename, songsdir):
 def main():
     ap = argparse.ArgumentParser(description="change the file names in (and of) the txt file to match the song title and artist")
     ap.add_argument("file", help="txt file to change")
-    ap.add_argument("-s", "--songsdir", help="songs directory (default: immediate parent of file)")
+    ap.add_argument("-s", "--songsdir", help="songs directory (default: from config if set, otherwise immediate parent of file)")
     args = ap.parse_args()
     if args.songsdir:
         songsdir = PurePath(args.songsdir)
     else:
-        songsdir = PurePath(args.file).parent
+        try:
+            songsdir = PurePath(getsongsdir())
+        except:
+            songsdir = PurePath(args.file).parent
     fixfilenames(args.file, songsdir)
 
 if __name__ == "__main__":
