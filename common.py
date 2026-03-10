@@ -62,13 +62,13 @@ class USFEvent:
 
 class USFParser:
     TAGS = {
-        "#BPM": "bpm",
-        "#MP3": "mp3",
-        "#TITLE": "title",
-        "#ARTIST": "artist",
-        "#COVER": "cover",
-        "#BACKGROUND": "background",
-        "#VIDEO": "video"
+        "#BPM": "bpm", "#MP3": "mp3", "#TITLE": "title", "#ARTIST": "artist",
+        "#COVER": "cover", "#BACKGROUND": "background", "#VIDEO": "video",
+        "#GAP": "gap", "#VIDEOGAP": "videogap", "#START": "start", "#END": "end",
+        "#PREVIEWSTART": "previewstart", "#MEDLEYSTARTBEAT": "medleystartbeat", 
+        "#MEDLEYENDBEAT": "medleyendbeat", "#YEAR": "year", "#GENRE": "genre",
+        "#LANGUAGE": "language", "#EDITION": "edition", "#P1": "p1", "#P2": "p2",
+        "#DUETSINGERP1": "p1", "#DUETSINGERP2": "p2", "#CREATOR": "creator"
     }
     def __init__(self):
         self.header = {}
@@ -117,6 +117,7 @@ class USFParser:
             for x in USFParser.TAGS.items():
                 if header == x[1]:
                     tag = x[0]
+                    break
             if tag != "":
                 outputlines.append(f"{tag}:{self.header[header]}")
         for event in self.events:
