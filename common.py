@@ -19,9 +19,12 @@ def writetofile(filename: str, data: str) -> None:
     with open(filename, "w") as outputfile:
         print(data, file=outputfile)
 
-def getsongsdir() -> str:
+def getconfigdir() -> Path:
     userhome = Path.home()
-    configdir = userhome.joinpath(".config", "karaoketools")
+    return userhome.joinpath(".config", "karaoketools")
+
+def getsongsdir() -> str:
+    configdir = getconfigdir()
     path = stringfromfile(configdir.joinpath("songsdir.txt")).strip()
     if len(path) < 2:
         raise RuntimeError()
