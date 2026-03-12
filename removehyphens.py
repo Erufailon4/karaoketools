@@ -3,8 +3,9 @@
 Remove trailing hyphens from karaoke files
 """
 
-from common import linesfromfile, writetofile
+from common import linesfromfile, writetofile, getsongsdir
 import argparse
+from pathlib import PurePath
 
 def removehyphens(filename):
     lines = linesfromfile(filename)
@@ -21,8 +22,16 @@ def removehyphens(filename):
 def main():
     ap = argparse.ArgumentParser(description="remove trailing hyphens from karaoke files")
     ap.add_argument("file", help="txt file to remove hyphens from")
+    ap.add_argument("-r", "--relative", help="interpret file path as relative to songs dir (if defined via config)", action="store_true")
     args = ap.parse_args()
-    removehyphens(args.file)
+    filename = args.file
+    if args.relative:
+        try:
+            filename = PurePath(getsongsdir()).joinpath(args.file)
+        except:
+            print("songs dir must be defined when using -r!")
+            return
+    removehyphens(filename)
 
 if __name__ == "__main__":
     main()
