@@ -22,7 +22,10 @@ def writetofile(filename: str, data: str) -> None:
 def getsongsdir() -> str:
     userhome = Path.home()
     configdir = userhome.joinpath(".config", "karaoketools")
-    return stringfromfile(configdir.joinpath("songsdir.txt")).strip()
+    path = stringfromfile(configdir.joinpath("songsdir.txt")).strip()
+    if len(path) < 2:
+        raise RuntimeError()
+    return path
 
 class USFEventType(Enum):
     NONE = "NONE"
