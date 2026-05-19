@@ -30,6 +30,13 @@ def getsongsdir() -> str:
         raise RuntimeError()
     return path
 
+def getmaterialsdir() -> str:
+    configdir = getconfigdir()
+    path = stringfromfile(configdir.joinpath("materialsdir.txt")).strip()
+    if len(path) < 2:
+        raise RuntimeError()
+    return path
+
 class USFEventType(Enum):
     NONE = "NONE"
     NORMAL = ":"
