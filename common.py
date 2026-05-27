@@ -37,6 +37,16 @@ def getmaterialsdir() -> str:
         raise RuntimeError()
     return path
 
+def msinbeats(ms: float, bpm: float) -> float:
+    realbpm = bpm*4
+    bpms = realbpm/60000
+    return bpms*ms
+
+def beatsinms(beats: float, bpm: float) -> float:
+    realbpm = bpm*4
+    mspb = 60000/realbpm
+    return mspb*beats
+
 class USFEventType(Enum):
     NONE = "NONE"
     NORMAL = ":"
