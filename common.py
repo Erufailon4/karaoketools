@@ -161,6 +161,7 @@ class USFParser:
         Parse a file, populating the header and events attributes of the parser object.
 
         :raises FileNotFoundError: If the file is not found.
+        :raises RuntimeError: If the required headers are not present.
         """
         preparsed = self.preparsefile(filename)
         for headerline in preparsed["header"]:
@@ -172,6 +173,9 @@ class USFParser:
                     self.events.append(USFEvent(bodyline))
                 case 'E':
                     break
+        for x in ["bpm", "title", "artist"]:
+            if x not in self.header:
+                raise RuntimeError(f"Missing header: {x}")
     
     def modifyheader(self, header: str, value: str) -> None:
         """
