@@ -89,6 +89,7 @@ class USFEventType(Enum):
     RAPGOLDEN = "G"
     FREESTYLE = "F"
     ENDOFPHRASE = "-"
+    EOF = "E"
 
 class USFEvent:
     def __init__(self, line: str):
@@ -98,13 +99,13 @@ class USFEvent:
         self.pitch = 0
         self.text = ""
         lineparts = line.split(maxsplit=4)
-        if len(lineparts) < 2:
+        if len(lineparts) < 2 and line.strip() != "E":
             raise SyntaxError
         try:
             self.type = USFEventType(lineparts[0])
-        except ValueError:
+            self.start = int(lineparts[1])
+        except:
             pass
-        self.start = int(lineparts[1])
         if len(lineparts) > 2:
             self.duration = int(lineparts[2])
             self.pitch = int(lineparts[3])
