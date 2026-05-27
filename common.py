@@ -7,23 +7,45 @@ from enum import Enum
 from pathlib import Path
 
 def stringfromfile(filename: str) -> str:
+    """
+    Return the contents of a text file as a string.
+
+    :raises FileNotFoundError: If the file is not found.
+    """
     with open(filename) as inputfile:
         text = inputfile.read()
         return text
 
 def linesfromfile(filename: str) -> list[str]:
+    """
+    Return the lines of a text file as a list of strings.
+
+    :raises FileNotFoundError: If the file is not found.
+    """
     lines = stringfromfile(filename).splitlines()
     return lines
 
 def writetofile(filename: str, data: str) -> None:
+    """
+    Write string data to a new file.
+    """
     with open(filename, "w") as outputfile:
         print(data, file=outputfile)
 
 def getconfigdir() -> Path:
+    """
+    Return the karaoketools config directory of the current user.
+    """
     userhome = Path.home()
     return userhome.joinpath(".config", "karaoketools")
 
 def getsongsdir() -> str:
+    """
+    Return the songs directory from config.
+
+    :raises FileNotFoundError: If the config file is not found.
+    :raises RuntimeError: If the config file is empty or too short.
+    """
     configdir = getconfigdir()
     path = stringfromfile(configdir.joinpath("songsdir.txt")).strip()
     if len(path) < 2:
@@ -31,6 +53,12 @@ def getsongsdir() -> str:
     return path
 
 def getmaterialsdir() -> str:
+    """
+    Return the materials directory from config.
+
+    :raises FileNotFoundError: If the config file is not found.
+    :raises RuntimeError: If the config file is empty or too short.
+    """
     configdir = getconfigdir()
     path = stringfromfile(configdir.joinpath("materialsdir.txt")).strip()
     if len(path) < 2:
@@ -38,11 +66,17 @@ def getmaterialsdir() -> str:
     return path
 
 def msinbeats(ms: float, bpm: float) -> float:
+    """
+    Return the given time in milliseconds converted to beats.
+    """
     realbpm = bpm*4
     bpms = realbpm/60000
     return bpms*ms
 
 def beatsinms(beats: float, bpm: float) -> float:
+    """
+    Return the given beats converted to time in milliseconds.
+    """
     realbpm = bpm*4
     mspb = 60000/realbpm
     return mspb*beats
@@ -105,6 +139,11 @@ class USFParser:
         return text
     
     def preparsefile(self, filename: str) -> dict[str, list]:
+        """
+        Preparse a file, returning the header lines and body lines as separate lists.
+
+        :raises FileNotFoundError: If the file is not found.
+        """
         lines = linesfromfile(filename)
         headerlines = []
         bodylines = []
@@ -118,6 +157,11 @@ class USFParser:
         return {"header": headerlines, "body": bodylines}
     
     def parsefile(self, filename: str) -> None:
+        """
+        Parse a file, populating the header and events attributes of the parser object.
+
+        :raises FileNotFoundError: If the file is not found.
+        """
         preparsed = self.preparsefile(filename)
         for headerline in preparsed["header"]:
             if headerline["key"] in USFParser.TAGS:
@@ -130,10 +174,16 @@ class USFParser:
                     break
     
     def modifyheader(self, header: str, value: str) -> None:
+        """
+        Set the given header to the given value. If header not found, do nothing.
+        """
         if header in self.header:
             self.header[header] = value
 
     def encode(self) -> list[str]:
+        """
+        Write the contents of the parser object to a list of lines in US format.
+        """
         outputlines = []
         for header in self.header.keys():
             tag = ""
@@ -150,5 +200,8 @@ class USFParser:
         return outputlines
     
     def encodetofile(self, filename: str) -> None:
+        """
+        Write the contents of the parser object to a file in US format.
+        """
         writetofile(filename, "\n".join(self.encode()))
 
