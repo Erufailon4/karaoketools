@@ -4,6 +4,7 @@ A collection of tools to help with making karaoke songs in the UltraStar format.
 
 - **concat.py:** "concatenates" two files with the same BPM, copying notes from the one with a longer gap to the one with a shorter gap, adjusting note start times to match the shorter gap
 - **config.py:** can be used to view and modify the configuration at `$HOME/.config/karaoketools/`
+- **info.py:** prints information about the song to stdout, with the option to convert beat values to time in seconds
 - **fixfilenames.py:** changes the text file's name (and references to audio/video/image files) to be in the "artist - title" format
 - **removehyphens.py:** removes hyphens from the end of each note's text while preserving possible whitespace
 
