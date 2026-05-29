@@ -126,7 +126,9 @@ class USFParser:
         "#PREVIEWSTART": "previewstart", "#MEDLEYSTARTBEAT": "medleystartbeat", 
         "#MEDLEYENDBEAT": "medleyendbeat", "#YEAR": "year", "#GENRE": "genre",
         "#LANGUAGE": "language", "#EDITION": "edition", "#P1": "p1", "#P2": "p2",
-        "#DUETSINGERP1": "p1", "#DUETSINGERP2": "p2", "#CREATOR": "creator"
+        "#DUETSINGERP1": "p1", "#DUETSINGERP2": "p2", "#CREATOR": "creator",
+        # nonstandard but included for personal reasons:
+        "#TAGS": "tags"
     }
     def __init__(self):
         self.header = {}
