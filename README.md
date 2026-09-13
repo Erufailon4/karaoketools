@@ -7,6 +7,7 @@ A collection of tools to help with making karaoke songs in the UltraStar format.
 - **info.py:** prints information about the song to stdout, with the option to convert beat values to time in seconds
 - **fixfilenames.py:** changes the text file's name (and references to audio/video/image files) to be in the "artist - title" format
 - **removehyphens.py:** removes hyphens from the end of each note's text while preserving possible whitespace
+- **statsfile.py:** generates a CSV file of the song's notes that can be used for statistics and analysis
 
 Running a tool with the `-h` or `--help` option will show the full syntax and options for each tool.
 
