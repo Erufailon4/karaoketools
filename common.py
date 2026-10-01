@@ -131,8 +131,8 @@ class USFParser:
         "#TAGS": "tags"
     }
     def __init__(self):
-        self.header = {}
-        self.events = []
+        self.header: dict[str, str] = {}
+        self.events: list[USFEvent] = []
     
     def __str__(self):
         try:
@@ -151,8 +151,8 @@ class USFParser:
         headerlines = []
         bodylines = []
         for line in lines:
-            if line.startswith('#'):
-                lineparts = line.split(':')
+            if line.strip().startswith('#'):
+                lineparts = line.strip().split(':')
                 if len(lineparts) > 1:
                     headerlines.append({"key": lineparts[0], "value": lineparts[1]})
             elif not line.isspace():
