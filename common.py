@@ -91,6 +91,9 @@ class Note:
         self.notename = parsed[0]
         self.octave = parsed[1]
 
+    def __str__(self):
+        return f"{self.notename}{self.octave}"
+
     @staticmethod
     def to_notation(number: int) -> tuple[str, int]:
         """

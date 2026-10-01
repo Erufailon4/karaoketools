@@ -3,12 +3,12 @@
 Print information about a song
 """
 
-from common import USFParser, beatsinms, getsongsdir
+from common import USFParser, beatsinms, getsongsdir, Note
 from typing import IO
 from pathlib import PurePath
 import sys, argparse
 
-def info(filename: str | PurePath, events: bool, sec: bool, outfile: IO[str] = sys.stdout):
+def info(filename: str | PurePath, events: bool, sec: bool, pitchname: bool, outfile: IO[str] = sys.stdout):
     parser = USFParser()
     try:
         parser.parsefile(filename)
@@ -26,7 +26,8 @@ def info(filename: str | PurePath, events: bool, sec: bool, outfile: IO[str] = s
         for event in parser.events:
             start = f"{(gap+beatsinms(event.start, bpm))/1000:.2f}" if sec else f"{event.start}"
             length = f"{beatsinms(event.duration, bpm)/1000:.2f}" if sec else f"{event.duration}"
-            outline = f"{event.type.value:<4} {start:<5}  {length:<6} {event.pitch:<5} {event.text}"
+            pitch = f"{Note(event.pitch)}" if pitchname else f"{event.pitch}"
+            outline = f"{event.type.value:<4} {start:<5}  {length:<6} {pitch:<5} {event.text}"
             print(outline, file=outfile)
 
 def main():
@@ -34,6 +35,7 @@ def main():
     ap.add_argument("file", help="song txt file")
     ap.add_argument("-e", "--events", help="list events", action="store_true")
     ap.add_argument("-s", "--sec", help="display times as seconds instead of beats", action="store_true")
+    ap.add_argument("-p", "--pitchname", help="display note pitches in notation", action="store_true")
     ap.add_argument("-r", "--relative", help="interpret file path as relative to songs dir (if defined via config)", action="store_true")
     args = ap.parse_args()
     filename = args.file
@@ -44,7 +46,7 @@ def main():
             print("songs dir must be defined when using -r!")
             return
         filename = songsdir.joinpath(filename)
-    info(filename, args.events, args.sec)
+    info(filename, args.events, args.sec, args.pitchname)
 
 if __name__ == "__main__":
     main()
