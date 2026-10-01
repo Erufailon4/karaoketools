@@ -5,6 +5,7 @@ Common functions and classes for all tools
 
 from enum import Enum
 from pathlib import Path
+import math
 
 def stringfromfile(filename: str) -> str:
     """
@@ -80,6 +81,26 @@ def beatsinms(beats: float, bpm: float) -> float:
     realbpm = bpm*4
     mspb = 60000/realbpm
     return mspb*beats
+
+class Note:
+    NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+
+    def __init__(self, number: int | str):
+        if number is str: number = int(number)
+        parsed = Note.to_notation(number)
+        self.notename = parsed[0]
+        self.octave = parsed[1]
+
+    @staticmethod
+    def to_notation(number: int) -> tuple[str, int]:
+        """
+        Return the given USF pitch converted to a tuple representing it in scientific pitch notation.
+        """
+        multiplier = math.floor(number / 12)
+        absnote = number-(multiplier*12)
+        notename = Note.NOTES[absnote]
+        octave = 4+multiplier
+        return (notename, octave)
 
 class USFEventType(Enum):
     NONE = "NONE"
